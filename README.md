@@ -10,6 +10,8 @@ Industrial Quality Dashboard to aplikacja webowa, służąca do monitorowania pr
 
 
 🚀 **Główne Funkcjonalności**
+
+
 **Monitorowanie w Czasie Rzeczywistym:** Automatyczne wykrywanie nowych logów produkcyjnych dzięki usłudze FileWatcher monitorującej foldery systemowe.
 
 **Analityka Wizualna (KPI):** Dynamiczne wykresy kołowe (Chart.js) prezentujące stosunek wyników PASS do FAIL oraz automatyczne wyliczanie wskaźnika Yield (FPY).
