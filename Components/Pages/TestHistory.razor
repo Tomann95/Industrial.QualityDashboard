@@ -1,0 +1,67 @@
+﻿@page "/history"
+@using Industrial.QualityDashboard.Models
+@using Microsoft.EntityFrameworkCore
+@inject AppDbContext db
+
+<PageTitle>IQD - Historia i Traceability</PageTitle>
+
+<div class="container-fluid p-4">
+    <h1 class="mb-4 text-dark fw-bold">Historia i Odpowiedzialność</h1>
+
+    <div class="card shadow border-0 mb-4">
+        <div class="card-body bg-light">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <label class="small fw-bold">Szukaj po Operatorze / SN:</label>
+                    <input type="text" class="form-control" @bind="searchTerm" @bind:event="oninput" placeholder="Wpisz imię lub numer..." />
+                </div>
+                <div class="col-md-8 text-end text-muted">
+                    <i class="bi bi-info-circle"></i> Lista zawiera pełną historię wykonanych testów.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive shadow rounded">
+        <table class="table table-hover bg-white">
+            <thead class="table-secondary">
+                <tr>
+                    <th>Data</th>
+                    <th>Numer Seryjny</th>
+                    <th>Operator (Tester)</th>
+                    <th>Stacja</th>
+                    <th>Wynik</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in filteredReports)
+                {
+                    <tr>
+                        <td>@r.ExecutionTime.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td class="fw-bold">@r.SerialNumber</td>
+                        <td><span class="text-secondary"><i class="bi bi-person-fill"></i> @r.TesterName</span></td>
+                        <td>@r.StationName</td>
+                        <td>
+                            <span class="badge @(r.Status == "PASS" ? "bg-success" : "bg-danger")">@r.Status</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<TestReport> allReports = new();
+    private string searchTerm = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        allReports = await db.TestReports.OrderByDescending(x => x.ExecutionTime).ToListAsync();
+    }
+
+    private IEnumerable<TestReport> filteredReports =>
+        allReports.Where(r => string.IsNullOrWhiteSpace(searchTerm)
+            || r.TesterName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+            || r.SerialNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+}

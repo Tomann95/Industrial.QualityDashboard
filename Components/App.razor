@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="Industrial.QualityDashboard.styles.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet @rendermode="InteractiveServer" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        window.setupPieChart = (pass, fail) => {
+            const ctx = document.getElementById('myPieChart');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['PASS', 'FAIL'],
+                    datasets: [{
+                        data: [pass, fail],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderWidth: 1
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+    </script>
+</head>
+
+<body>
+
+    <Routes @rendermode="InteractiveServer" />
+    <script src="_framework/blazor.web.js"></script>
+    <script>
+        window.downloadFile = (fileName, base64String) => {
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = 'data:application/pdf;base64,' + base64String;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+
+</html>

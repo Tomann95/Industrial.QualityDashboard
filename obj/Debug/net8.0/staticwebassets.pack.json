@@ -1,0 +1,49 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\User\\.nuget\\packages\\chartjs.blazor.fork\\2.0.2\\contentFiles\\any\\netstandard2.1\\wwwroot\\ChartJsBlazorInterop.js",
+      "PackagePath": "staticwebassets\\ChartJsBlazorInterop.js"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\ProjektyCSharp\\Industrial.QualityDashboard\\Industrial.QualityDashboard\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Industrial.QualityDashboard.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Industrial.QualityDashboard.2isvj5t8j3.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\ProjektyCSharp\\Industrial.QualityDashboard\\Industrial.QualityDashboard\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\ProjektyCSharp\\Industrial.QualityDashboard\\Industrial.QualityDashboard\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\ProjektyCSharp\\Industrial.QualityDashboard\\Industrial.QualityDashboard\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\ProjektyCSharp\\Industrial.QualityDashboard\\Industrial.QualityDashboard\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Industrial.QualityDashboard.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Industrial.QualityDashboard.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Industrial.QualityDashboard.props",
+      "PackagePath": "build\\Industrial.QualityDashboard.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Industrial.QualityDashboard.props",
+      "PackagePath": "buildMultiTargeting\\Industrial.QualityDashboard.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Industrial.QualityDashboard.props",
+      "PackagePath": "buildTransitive\\Industrial.QualityDashboard.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

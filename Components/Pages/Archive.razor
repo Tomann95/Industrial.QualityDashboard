@@ -1,0 +1,68 @@
+﻿@page "/archive"
+@using System.IO
+@inject IJSRuntime JS
+
+<PageTitle>IQD - Archiwum Plików</PageTitle>
+
+<div class="container-fluid p-4">
+    <h1 class="mb-4 text-dark fw-bold">Archiwum Logów Procesowych</h1>
+
+    <div class="card shadow border-0">
+        <div class="card-header bg-secondary text-white fw-bold">
+            Pliki w folderze Processed
+        </div>
+        <div class="card-body">
+            @if (archivedFiles == null || !archivedFiles.Any())
+            {
+                <div class="alert alert-info">Brak zarchiwizowanych plików w folderze.</div>
+            }
+            else
+            {
+                <table class="table table-sm table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nazwa pliku</th>
+                            <th>Data archiwizacji</th>
+                            <th class="text-end">Akcja</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var file in archivedFiles)
+                        {
+                            <tr>
+                                <td><i class="bi bi-file-text me-2"></i>@Path.GetFileName(file)</td>
+                                <td>@File.GetCreationTime(file).ToString("yyyy-MM-dd HH:mm")</td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-primary" @onclick="() => ShowContent(file)">
+                                        Podgląd treści
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private string[]? archivedFiles;
+    // Ścieżka do Twojego folderu Processed
+    private string archivePath = @"C:\Users\User\Desktop\ProjektyCSharp\Industrial.QualityDashboard\Industrial.QualityDashboard\ProductionLogs\Processed";
+
+    protected override void OnInitialized()
+    {
+        if (Directory.Exists(archivePath))
+        {
+            archivedFiles = Directory.GetFiles(archivePath, "*.txt");
+        }
+    }
+
+    private async Task ShowContent(string filePath)
+    {
+        string content = await File.ReadAllTextAsync(filePath);
+        // Wyświetlamy treść pliku w prostym oknie przeglądarki
+        await JS.InvokeVoidAsync("alert", $"Treść logu:\n\n{content}");
+    }
+}

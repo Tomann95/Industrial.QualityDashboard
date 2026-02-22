@@ -1,0 +1,92 @@
+﻿@page "/statistics"
+@using Industrial.QualityDashboard.Models
+@using Microsoft.EntityFrameworkCore
+@inject AppDbContext db
+@inject IJSRuntime JS
+
+<PageTitle>IQD - Analiza Jakości</PageTitle>
+
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-dark fw-bold">Analityka Systemowa</h1>
+        <span class="badge bg-primary p-2">Dane na żywo: @DateTime.Now.ToString("HH:mm")</span>
+    </div>
+
+    <div class="row">
+        @* Lewa kolumna: Wykres *@
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white fw-bold">Stosunek PASS do FAIL</div>
+                <div class="card-body d-flex justify-content-center align-items-center" style="min-height: 400px;">
+                    <canvas id="myPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        @* Prawa kolumna: Szczegółowe metryki *@
+        <div class="col-lg-5 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-secondary text-white fw-bold">Szczegóły Produkcji</div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Wszystkie logi:
+                            <span class="badge bg-dark rounded-pill">@totalCount</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Produkty sprawne (PASS):
+                            <span class="badge bg-success rounded-pill">@passCount</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Odrzuty (FAIL):
+                            <span class="badge bg-danger rounded-pill">@failCount</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Aktualny Yield (Skuteczność):
+                            <span class="fw-bold text-success">@yieldVal%</span>
+                        </li>
+                    </ul>
+
+                    <div class="mt-4 p-3 bg-light rounded border">
+                        <h6 class="fw-bold"><i class="bi bi-info-circle"></i> Interpretacja:</h6>
+                        <p class="small text-muted mb-0">
+                            Wykres reprezentuje całkowitą kondycję linii produkcyjnej.
+                            Wysoki poziom koloru czerwonego (FAIL) sugeruje konieczność przeglądu stacji:
+                            <strong>@(topFailStation ?? "Brak błędów")</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int totalCount;
+    private int passCount;
+    private int failCount;
+    private double yieldVal;
+    private string? topFailStation;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var reports = await db.TestReports.ToListAsync();
+            totalCount = reports.Count;
+            passCount = reports.Count(r => r.Status == "PASS");
+            failCount = reports.Count(r => r.Status == "FAIL");
+            yieldVal = reports.Any() ? Math.Round((double)passCount / totalCount * 100, 1) : 0;
+
+            // Logika wyznaczania stacji z największą liczbą błędów
+            topFailStation = reports.Where(r => r.Status == "FAIL")
+                                    .GroupBy(r => r.StationName)
+                                    .OrderByDescending(g => g.Count())
+                                    .Select(g => g.Key)
+                                    .FirstOrDefault();
+
+            StateHasChanged();
+            await JS.InvokeVoidAsync("setupPieChart", passCount, failCount);
+        }
+    }
+}

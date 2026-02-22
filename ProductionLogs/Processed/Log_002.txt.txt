@@ -1,0 +1,1 @@
+SN:IQD-2026-003;Result:FAIL;Station:Vision_Check;Duration:12.5

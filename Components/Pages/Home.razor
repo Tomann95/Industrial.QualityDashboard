@@ -1,0 +1,139 @@
+﻿@page "/"
+@using Industrial.QualityDashboard.Models
+@using Industrial.QualityDashboard.Services
+@using Microsoft.EntityFrameworkCore
+@inject AppDbContext db
+@inject PdfService PdfService
+@inject IJSRuntime JS
+
+<PageTitle>IQD - System Monitoringu Jakości</PageTitle>
+
+<div class="container-fluid p-4">
+    <h1 class="mb-4 text-dark fw-bold">Industrial Quality Dashboard</h1>
+
+    @if (reports == null)
+    {
+        <div class="d-flex align-items-center">
+            <strong>Ładowanie danych z bazy...</strong>
+            <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+        </div>
+    }
+    else
+    {
+        
+        <div class="row mb-4 g-3">
+            <div class="col-md-3">
+                <div class="card bg-dark text-white shadow border-0 h-100">
+                    <div class="card-body text-center d-flex flex-column justify-content-center">
+                        <h5 class="card-title text-uppercase small">Wszystkie testy</h5>
+                        <h2 class="display-6 fw-bold mb-0">@reports.Count</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                @{
+                    var passCount = reports.Count(r => r.Status == "PASS");
+                    var yieldVal = reports.Any() ? Math.Round((double)passCount / reports.Count * 100, 1) : 0;
+                }
+                <div class="card bg-success text-white shadow border-0 h-100">
+                    <div class="card-body text-center d-flex flex-column justify-content-center">
+                        <h5 class="card-title text-uppercase small">Wskaźnik Yield (FPY)</h5>
+                        <h2 class="display-6 fw-bold mb-0">@yieldVal%</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card bg-danger text-white shadow border-0 h-100">
+                    <div class="card-body text-center d-flex flex-column justify-content-center">
+                        <h5 class="card-title text-uppercase small">Testy FAIL</h5>
+                        <h2 class="display-6 fw-bold mb-0">@reports.Count(r => r.Status == "FAIL")</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card bg-info text-white shadow border-0 h-100">
+                    <div class="card-body text-center d-flex flex-column justify-content-center">
+                        <h5 class="card-title text-uppercase small">Ostatnia Synchronizacja</h5>
+                        <h2 class="fs-4 fw-bold mb-0">
+                            @(reports.Any() ? reports.Max(r => r.ExecutionTime).ToString("HH:mm:ss") : "--:--:--")
+                        </h2>
+                        <small class="opacity-75">@DateTime.Now.ToString("yyyy-MM-dd")</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-light border shadow-sm mb-4">
+            Status systemu: <strong>Połączono z bazą IndustrialQualityDB</strong>
+        </div>
+
+        @* Tabela z wynikami *@
+        <div class="table-responsive shadow-lg rounded">
+            <table class="table table-hover align-middle bg-white mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="ps-3">S/N (Numer Seryjny)</th>
+                        <th>Stacja Robocza</th>
+                        <th class="text-center">Status</th>
+                        <th>Timestamp</th>
+                        <th class="text-center">Akcja</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in reports)
+                    {
+                        <tr>
+                            <td class="ps-3 fw-bold text-primary">@r.SerialNumber</td>
+                            <td>@r.StationName</td>
+                            <td class="text-center">
+                                <span class="badge @(r.Status == "PASS" ? "bg-success" : "bg-danger") px-3 py-2">
+                                    @r.Status
+                                </span>
+                            </td>
+                            <td>@r.ExecutionTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-danger shadow-sm" @onclick="() => DownloadPdf(r)">
+                                    <i class="bi bi-file-earmark-pdf"></i> Raport PDF
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    private List<TestReport> reports = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+           
+            reports = await db.TestReports.OrderByDescending(x => x.ExecutionTime).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine("Błąd ładowania danych: " + ex.Message);
+        }
+    }
+
+    private async Task DownloadPdf(TestReport report)
+    {
+        try
+        {
+            var pdfBytes = PdfService.GenerateTestReport(report);
+            var fileName = $"QC_Report_{report.SerialNumber}.pdf";
+            await JS.InvokeVoidAsync("downloadFile", fileName, Convert.ToBase64String(pdfBytes));
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine("Błąd pobierania PDF: " + ex.Message);
+        }
+    }
+}

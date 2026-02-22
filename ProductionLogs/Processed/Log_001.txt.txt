@@ -1,0 +1,1 @@
+SN:IQD-2026-002;Result:PASS;Station:Main_Assembly;Duration:45.2
