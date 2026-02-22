@@ -1,4 +1,4 @@
-Industrial Quality Dashboard (IQD)
+
 Industrial Quality Dashboard to aplikacja webowa, służąca do monitorowania procesów kontroli jakości w środowisku przemysłowym w czasie rzeczywistym. System automatyzuje zbieranie logów z maszyn, analizuje wydajność produkcji (KPI) oraz zapewnia pełną identyfikowalność (Traceability) produktów i operatorów.
 
 
