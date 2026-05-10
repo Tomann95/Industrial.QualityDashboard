@@ -1,6 +1,6 @@
 #  Industrial Quality Dashboard
 
-Industrial Quality Dashboard to aplikacja webowa, służąca do monitorowania procesów kontroli jakości w środowisku przemysłowym w czasie rzeczywistym. System automatyzuje zbieranie logów z maszyn, analizuje wydajność produkcji (KPI) oraz zapewnia pełną identyfikowalność (Traceability) produktów i operatorów.
+Industrial Quality Dashboard to aplikacja webowa, służąca do monitorowania procesów kontroli jakości w środowisku przemysłowym w czasie rzeczywistym. System automatyzuje zbieranie logów z maszyn, analizuje wydajność produkcji oraz zapewnia pełną identyfikowalność produktów i operatorów.
 
 
 <img width="1919" height="876" alt="image" src="https://github.com/user-attachments/assets/d5ffe9f3-aac5-4c8a-8b6e-8d2cd9c1b804" />
@@ -14,12 +14,12 @@ Industrial Quality Dashboard to aplikacja webowa, służąca do monitorowania pr
 
 **Monitorowanie w Czasie Rzeczywistym:** Automatyczne wykrywanie nowych logów produkcyjnych dzięki usłudze FileWatcher monitorującej foldery systemowe.
 
-**Analityka Wizualna (KPI):** Dynamiczne wykresy kołowe (Chart.js) prezentujące stosunek wyników PASS do FAIL oraz automatyczne wyliczanie wskaźnika Yield (FPY).
+**Analityka Wizualna:** Dynamiczne wykresy kołowe prezentujące stosunek wyników PASS do FAIL oraz automatyczne wyliczanie wskaźnika Yield.
 
 <img width="1919" height="876" alt="image" src="https://github.com/user-attachments/assets/670d2826-d499-4b8c-82f9-974284de15db" />
 
 
-**Pełna Identyfikowalność (Traceability):** Rejestracja szczegółowych danych o każdym teście: numer seryjny (S/N), nazwa stacji (np. HV_Test, Vision_Check), czas trwania oraz przypisany operator (Tester).
+**Pełna Identyfikowalność:** Rejestracja szczegółowych danych o każdym teście: numer seryjny (S/N), nazwa stacji (np. HV_Test, Vision_Check), czas trwania oraz przypisany operator.
 
 <img width="1424" height="591" alt="image" src="https://github.com/user-attachments/assets/3bdf6d28-6b11-4ef8-ba18-4074eb1a3fa4" />
 
